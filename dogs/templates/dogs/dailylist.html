@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load mathfilters %}
+
+{% block title %} - 일일기록{% endblock %}
+
+{% block content %}
+
+<!--<form method='GET'>-->
+<!--  <input type='text' name='q' value='{{ request.GET.q }}'>-->
+<!--  <input class="button" type='submit' value="검색">-->
+<!--</form>-->
+
+<div class="container">
+    <br>
+    <a href="{% url 'dogs:chart' %}" class="float-right onlyhover" style="text-decoration: none; color: #3ADF00;"><i class="far fa-chart-bar fa-2x"></i><br>차트로 확인하기</a>
+    <a href="{% url 'dogs:daily_create' %}" class="float-right onlyhover" style="text-decoration: none; color: #8258FA;"><i class="fas fa-feather fa-2x"></i><br>일기작성&emsp;</a>
+
+    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+
+    <table class="table table-bordered table-striped nanum table-hover" style="border-collapse: separate; border-spacing: 0 10px;">
+        <thead>
+            <tr style="font-weight: 600; font-family: 'Nanum Gothic', sans-serif;">
+                <th width="50">번호</th>
+                <th width="100">이름</th>
+                <th width="100">산책 횟수</th>
+                <th width="100">산책 시간</th>
+                <th width="100">사료 배급량</th>
+                <th width="100">간식 배급횟수</th>
+                <th width="100">태그</th>
+                <th width="100">수정한 날짜</th>
+            </tr>
+        </thead>
+
+        <tbody id="myTable">
+        {% for post in dailys %}
+
+            <tr style="border-spacing: 10px; font-family: 'Poor Story', cursive;">
+                <td align="right"><a href="{% url 'dogs:daily_detail' pk=post.id %}">
+                    {% with max=dailys.paginator.object_list.count|add:1 this=forloop.counter0|add:dailys.start_index %}
+                        {{max|sub:this}}
+                    {% endwith %}
+                </a></td>
+                <td align="right">{{post.names}}</td>
+                <td align="right">{{post.walkcount}} 회</td>
+                <td align="right">
+                    {{post.walktime.hour}}시간 {{post.walktime.minute}}분
+                </td>
+                <td align="right">{{post.foodamount}} gram</td>
+                <td align="right">{{post.snackcount}} 회</td>
+                <td align="right">
+                    {% load tagging_tags %}
+                    {% tags_for_object post as tags %}
+                    {% for tag in tags %}
+                        <a href="{% url 'dogs:tagged_object_list_daily' tag.name %}">#{{ tag.name }} </a>
+                    {% endfor %}</td>
+                <td align="right">{{post.updated.year}}년 {{post.updated.month}}월 {{post.updated.day}}일</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+</script>
+{% endblock %}
+
+{% block pagination %}
+    <ul class="pagination justify-content-center pagination-sm">
+        {% if dailys.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ dailys.previous_page_number }}"
+                   tabindex="-1">Previous</a>
+            </li>
+        {% endif %}
+
+        {% for object in dailys.paginator.page_range %}
+            <li class="page-item {% if dailys.number == forloop.counter %} disabled {% endif %} ">
+                <a class="page-link" href="{{ request.path }}?page={{ forloop.counter }}"> {{ forloop.counter }}</a>
+            </li>
+        {% endfor %}
+
+        {% if dailys.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ dailys.next_page_number }}">Next</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        {% endif %}
+    </ul>
+<br><br><br><br>
+{% endblock %}

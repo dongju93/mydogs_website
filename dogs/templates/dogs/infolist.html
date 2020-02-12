@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %} - 기본정보{% endblock %}
+
+{% block style %}
+    #footer {
+        position: fixed;
+        bottom: 0;
+        width: 1110px;
+    }
+{% endblock %}
+
+{% block content %}
+<br><div>
+<a href="{% url 'dogs:info_create' %}" style="font-family: 'Poor Story', cursive; font-size: 20px; float: right; text-decoration: none; color: #8258FA;" class="onlyhover"><i class="fas fa-feather fa-2x"></i><br>작성</a>
+</div>
+    <br>
+{% for post in infos %}
+<br>
+    <div class="row">
+        <div class="col-md-2"></div>
+
+        <ul style="font-family: 'Poor Story', cursive; font-size: 20px;">
+            <h2 align="center"><i class="fas fa-dog fa-lg"></i> 우리 강아지 기본 정보</h2>
+            <br>
+            <p><img src="{{post.dogpic.url}}" style="height:300px; border-radius: 30px;" class="shadows"></p>
+
+            <br>
+            <p><i class="fas fa-signature"></i> 이름 : {{post.names}}</p>
+            <p><i class="fas fa-birthday-cake"></i> 생일 : {{post.birth}}</p>
+            <p><i class="fas fa-weight"></i> 몸무게 : {{post.weight}} kg /
+                종 : {{post.species}}</p>
+            <p><i class="far fa-clipboard"></i> 등록번호 : {{post.registernumber}}</p>
+
+            <p><i class="fas fa-venus-mars"></i> 성별 : {% if post.gender == 'Male' %}
+                    수
+                {% else %}
+                    암
+                {% endif %} /
+                중성화 여부 : {% if post.neutral == True %}
+                Yes
+                {% else %}
+                No
+                {% endif %} </p>
+
+            <br><hr><br>
+
+            <h2 align="center"><i class="fas fa-syringe"></i> 예방접종 정보</h2>
+            <br>
+            <p><i class="fas fa-check"></i> DHPPL(종합백신) : {{post.dhppl}}</p>
+            <p>
+            &emsp;- 5종 혼합백신 (개홍역, 전염성 간염, 파보장염, 파라인플루엔자, 렙토스피라)<br>
+            &emsp;- 권장 접종 주기 : 생후 6~8주 (2~3주 간격 5회), 이후 연 1회 추가.
+            </p>
+            <p><i class="fas fa-check"></i> 코로나 : {{post.corona}}</p>
+            <p>
+            &emsp;- 코로나 장염 예방<br>
+            &emsp;- 권장 접종 주기 : 생후 6~8주 (2~3주 간격 2회), 이후 연 1회 추가.
+            </p>
+            <p><i class="fas fa-check"></i> 켄넬코프 : {{post.kennel}}</p>
+            <p>
+            &emsp;- 공기를 통해 감연되는 감기의 일종 (전염성 높음, 악화시 폐렴)<br>
+            &emsp;- 권장 접종 주기 : 생후 6~8주 (2~3주 간격 2회), 이후 연 1회 추가.
+            </p>
+            <p><i class="fas fa-check"></i> 광견병 : {{post.rabies}}</p>
+            <p>
+            &emsp;- 모든 온혈동물에게서 발생되는 질병 (중추신경계 감염시 치명적)<br>
+            &emsp;- 권장 접종 주기 : 생후 6~8주 (1회), 이후 연 1회 추가.<br>
+            &emsp;- 국가 지원 예방접종이므로 무료 혹은 자가 부담금 3,000원.
+            </p>
+            <p><i class="fas fa-check"></i> 심장사상충 : {{post.heartworm}}</p>
+            <p>
+            &emsp;- 모기를 매개로 하여 전염되는 회충(기생충), 심장 및 폐동맥에서 심각한 증상 유발<br>
+            &emsp;- 권장 접종 주기 : 생후 6~8주 부터 매달 1회. (복용형 혹은 주사형 선택)
+            </p>
+            <br>
+            <p>최종 작성일 : {{post.updated}}</p>
+
+            <a href="{% url 'dogs:info_delete' pk=post.id %}" class="float-right onlyhover" style="text-decoration: none; color: #FE2E2E;"><i class="fas fa-trash-alt fa-2x"></i><br>삭제</a>
+            <a href="{% url 'dogs:info_update' pk=post.id %}" class="float-right onlyhover" style="text-decoration: none; color: #3ADF00;"><i class="fas fa-edit fa-2x"></i>&nbsp;&nbsp;<br>수정</a>
+        </ul>
+</div>
+<br><br><br>
+{% endfor %}
+{% endblock %}

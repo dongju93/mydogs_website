@@ -1,0 +1,17 @@
+<div class="container" align="center">
+    <br><img src="https://realorigin-s3.s3.ap-northeast-2.amazonaws.com/static/media/background/logo-vert.jpg"><br>
+    {% load account %}
+    {% user_display user as user_display %}
+    {% load i18n %}{% autoescape off %}
+
+    {% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
+    <br>
+    <h3>안녕하세요, MyDOGS 입니다!</h3>
+
+    <br>{{ user_display }} 회원의 이메일 인증 입니다.
+    <br>가입한 본인이 맞고, 이메일을 인증하려면 해당 링크를 누르세요.
+    <br><br><a href="{{ activate_url }}">이메일 인증하기</a>
+    {% endblocktrans %}{% endautoescape %}
+    <br><br>감사합니다. <a href="#">MyDOGS.</a>
+
+</div>

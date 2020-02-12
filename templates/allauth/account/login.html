@@ -1,0 +1,142 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+{% load static %}
+
+{% block head_title %} - Sign In {% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container" align="center">
+
+  <script src="https://www.google.com/recaptcha/api.js"></script>
+  <script>
+    function recaptcha_check() {
+      var v = grecaptcha.getResponse();
+      if(v.length == 0) {
+        alert('reCAPTCHA 를 체크해주세요.');
+        return false;
+       } else {
+        return true;
+       }
+     }
+  </script>
+
+  <br>
+
+<!--  <h1 style="font-family: 'BMDOHYEON'; font-size: 43px; font-weight: bold; letter-spacing: 1px; line-height: 130%">사이트 이용을 위해<br>로그인을 쇽쇽쇽</h1>-->
+<p style="font-size: 16px;">체험용 계정 - ID: test / PASSWORD: $123qwer</p>
+  <hr style="margin-bottom: -30px; margin-top: -16px;">
+
+  {% get_providers as socialaccount_providers %}
+  <form class="login" method="POST" action="{% url 'account_login' %}" onsubmit="return recaptcha_check();">
+    {% csrf_token %}
+    <svg id="ryan" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,150 C0,65 120,65 120,150" fill="#e0a243" stroke="#000" stroke-width="2.5"></path>
+          <g class="ears">
+            <path d="M46,32 L46,30 C46,16 26,16 26,30 L26,32" fill="#e0a243" stroke="#000" stroke-width="2.5" stroke-linecap="round" transform="rotate(-10,38,24)"></path>
+            <path d="M74,32 L74,30 C74,16 94,16 94,30 L94,32" fill="#e0a243" stroke="#000" stroke-width="2.5" stroke-linecap="round" transform="rotate(10,82,24)"></path>
+          </g>
+      <circle cx="60" cy="60" r="40" fill="#e0a243" stroke="#000" stroke-width="2.5"></circle>
+          <g class="eyes">
+              <!-- left eye and eyebrow-->
+            <line x1="37" x2="50" y1="46" y2="46" stroke="#000" stroke-width="3" stroke-linecap="round"></line>
+            <circle cx="44" cy="55" r="3" fill="#000"></circle>
+              <!-- right eye and eyebrow -->
+            <line x1="70" x2="83" y1="46" y2="46" stroke="#000" stroke-width="3" stroke-linecap="round"></line>
+            <circle cx="76" cy="55" r="3" fill="#000"></circle>
+          </g>
+          <g class="muzzle">
+            <path d="M60,66 C58.5,61 49,63 49,69 C49,75 58,77 60,71 M60,66 C61.5,61 71,63 71,69 C71,75 62,77 60,71" fill="#fff"></path>
+            <path d="M60,66 C58.5,61 49,63 49,69 C49,75 58,77 60,71 M60,66 C61.5,61 71,63 71,69 C71,75 62,77 60,71" fill="#fff" stroke="#000" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path>
+            <polygon points="59,63.5,60,63.4,61,63.5,60,65" fill="#000" stroke="#000" stroke-width="5" stroke-linejoin="round"></polygon>
+          </g>
+      <path d="M40,105 C10,140 110,140 80,105 L80,105 L70,111 L60,105 L50,111 L40,105" fill="#fff"></path>
+    </svg>
+    <p style="font-size: 11px; font-style: italic;">© Kakao Corp. All rights reserved.</p>
+    <input type="text" name="login" placeholder="아이디" autofocus="autofocus" maxlength="150" required="" id="id_login" autocomplete="off" style="width: 85%;">
+
+    <p class="pwdlook"><input type="password" name="password" placeholder="비밀번호" required="" id="id_password" autocomplete="off" style="width: 75%;">&nbsp;<i style="color: rgb(255,255,255); width: 25px; text-align: middle;" class="far fa-eye fa-lg fa-fw"></i></p>
+
+    <div class="checks etrans">
+      <input type="checkbox" name="remember" id="id_remember">
+      <label for="id_remember">Remember ID</label>
+    </div>
+
+    {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+
+    <a style="font-size: 16px; font-weight: bold; text-decoration: none;" class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+
+    <br>
+
+    <div class="g-recaptcha" data-sitekey="6LcNJKwUAAAAAANNwWWMwAbk1j0yeRU-A3Lhep0o"></div>
+
+    <button class="primaryAction buttonn button1" type="submit">로그인</button>
+
+  </form>
+
+  {% if form.errors %}
+      {% for field in form %}
+          {% for error in field.errors %}
+              <div class="alert alert-error roundop" style="width: 60%; outline: none; box-shadow: 0 0 0 2px #f00; margin-top: -70px;">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+          {% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+          <div class="alert alert-error roundop" style="width: 60%; outline: none; box-shadow: 0 0 0 2px #f00; margin-top: -70px;">
+              <strong>{{ error|escape }}</strong>
+          </div>
+      {% endfor %}
+    {% endif %}
+
+
+
+  <hr style="margin-top: -40px;">
+
+  {% if socialaccount_providers %}
+  <div class="socialaccount_ballot">
+    <ul class="socialaccount_providers">
+      {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+    </ul>
+  <!-- <div class="login-or">{% trans 'or' %}</div> -->
+  </div>
+
+  <h5 style="font-weight: bold;">{% blocktrans with site.name as site_name %}가입되어 있는 계정이나,
+    소셜 버튼을 통해 로그인 해주세요.<br>
+    또는, <a href="{{ signup_url }}">가입하기</a>
+    버튼을 통해 새로 회원 가입을 해주세요.{% endblocktrans %}</h5>
+  <br><br>
+  {% include "socialaccount/snippets/login_extra.html" %}
+
+  {% else %}
+<!--  <p>{% blocktrans %}If you have not created an account yet, then please
+  <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>-->
+  {% endif %}
+
+  <script src="{% static 'js/Ryan.js' %}" type="text/javascript"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.pwdlook i').on('click',function() {
+          $('input').toggleClass('active');
+          if($('input').hasClass('active')) {
+              $(this).attr('class',"far fa-eye-slash fa-lg fa-fw")
+              .prev('input').attr('type',"text");
+          } else {
+              $(this).attr('class',"far fa-eye fa-lg fa-fw")
+              .prev('input').attr('type','password');
+          }
+      });
+    });
+  </script>
+
+</div>
+<br><br>
+
+{% endblock %}

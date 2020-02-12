@@ -1,0 +1,39 @@
+{% load socialaccount %}
+
+{% get_providers as socialaccount_providers %}
+
+{% for provider in socialaccount_providers %}
+{% if provider.id == "openid" %}
+{% for brand in provider.get_brands %}
+<li>
+  <a title="{{brand.name}}" 
+     class="socialaccount_provider {{provider.id}} {{brand.id}}" 
+     href="{% provider_login_url provider.id openid=brand.openid_url process=process %}"
+     >{{brand.name}}</a>
+</li>
+{% endfor %}
+{% endif %}
+
+{% if provider.name == "Naver" %}
+  <a style="text-decoration: none;" title="{{provider.name}}" class="socialaccount_provider {{provider.id}}"
+     href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+      <img src="https://realorigin-s3.s3.ap-northeast-2.amazonaws.com/static/media/socialbtn/naverbtn.png">
+  </a>
+{% elif provider.name == "Kakao" %}
+  <a style="text-decoration: none;" title="{{provider.name}}" class="socialaccount_provider {{provider.id}}"
+     href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+      <img src="https://realorigin-s3.s3.ap-northeast-2.amazonaws.com/static/media/socialbtn/kakaobtn.png">
+  </a>
+{% elif provider.name == "Google" %}
+  <a style="text-decoration: none;" title="{{provider.name}}" class="socialaccount_provider {{provider.id}}"
+     href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+      <img src="https://realorigin-s3.s3.ap-northeast-2.amazonaws.com/static/media/socialbtn/googlebtn.png">
+  </a>
+{% elif provider.name == "Instagram" %}
+  <a style="text-decoration: none;" title="{{provider.name}}" class="socialaccount_provider {{provider.id}}"
+     href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+      <img src="https://realorigin-s3.s3.ap-northeast-2.amazonaws.com/static/media/socialbtn/instabtn.png">
+  </a>
+{% endif %}
+
+{% endfor %}

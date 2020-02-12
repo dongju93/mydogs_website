@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %} - 일일정보 수정{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 panel panel-default" style="font-family: 'Poor Story', cursive; font-size: 20px;">
+        <form action="" method="post" enctype="multipart/form-data">
+            <br>
+            <h2 align="center"><i class="fas fa-thumbtack"></i> 일일 정보 수정하기</h2>
+            <br>
+            <p><label for="id_names"><i class="fas fa-signature"></i> 이름 : </label> <input class="roundop" type="text" name="names" maxlength="100" required="" id="id_names" value="{{object.names}}"></p>
+
+            <p><label for="id_walkcount"><i class="fas fa-walking"></i> 산책 횟수 : </label> <input class="roundop" type="number" name="walkcount" required="" id="id_walkcount" value="{{object.walkcount}}"></p>
+            <p>
+            &emsp;▷ 10분이라도 좋습니다! 하루에 산책을 나간 횟수를 기록해주세요.<br>
+            &emsp;▷ 1일 1산책은 기본인거 아시죠~?
+            </p>
+
+            <p><label for="id_walktime"><i class="fas fa-hourglass-half"></i> 산책시간 : </label> <input class="roundop" type="time" name="walktime" id="id_walktime" value="{% if object.walktime.hour < 10 %}0{{ object.walktime.hour }}{% else %}{{ object.walktime.hour }}{% endif %}:{% if object.walktime.minute < 10 %}0{{ object.walktime.minute }}{% else %}{{ object.walktime.minute }}{% endif %}"></p>
+            <p>
+            &emsp;▷ 산책 나간 총 시간을 더해서 기록해주세요.<br>
+            </p>
+
+            <p><label for="id_foodamount"><i class="fas fa-bone"></i> 사료 배급량 : </label> <input class="roundop" type="number" name="foodamount" step="0.01" required="" id="id_foodamount" value="{{object.foodamount}}"> gram</p>
+            <p>
+            &emsp;▷ 하루 사료 급여랑을 '그램' 단위로 기록해주세요.<br>
+            &emsp;▷ 소수점 둘째 자리까지 기록 가능합니다. (ex. 253.85 gram)
+            </p>
+
+            <p><label for="id_snackcount"><i class="fas fa-cookie-bite"></i> 간식 배급횟수 : </label> <input class="roundop" type="number" name="snackcount" step="0.01" required="" id="id_snackcount" value="{{object.snackcount}}"></p>
+            <p>
+            &emsp;▷ 하루에 간식을 몇개 급여했는지 기록해주세요.<br>
+            &emsp;▷ 1개 기준은 간식별 낱개 수량 혹은 기준을 정하기 어려울 경우,<br>
+            &emsp;&emsp;기존에 급여하던 간식량과 비교하여 기록해주세요<br>
+            &emsp;▷ 간식 및 사료량 비교차트는 자신에게만 보여집니다.
+            </p>
+
+            <br><hr><br>
+            <h3 align="center"><i class="far fa-comment-dots"></i> 추가 정보</h3><br>
+
+            <p><label for="id_remarks"><i class="far fa-bell"></i> 특이사항 : </label> <textarea class="roundop" name="remarks" rows="4" id="id_remarks" style="width:100%;">{{object.remarks}}</textarea></p>
+            <p>
+            &emsp;▷ 당일의 특이사항에 대해 기록해주세요.<br>
+            &emsp;▷ 일기 형태로 기록하셔도 좋고, 당일 반려견에 대해 짤막하게 기록해주셔도 좋습니다.
+            </p>
+
+            <p><label for="id_statustrace"><i class="fas fa-asterisk"></i> 상태추적 : </label> <textarea class="roundop" name="statustrace" rows="3" id="id_statustrace" style="width:100%;">{{object.statustrace}}</textarea></p>
+            <p>
+            &emsp;▷ 특정한 상태 추적이 필요할때 계속해서 상태를 추적하기위해 상황별 변화를 기록해주세요.<br>
+            &emsp;▷ 이상증상이 의심되거나 기록이 필요할때 참고해서 이용하시면 좋습니다.
+            </p>
+
+            <p><label for="id_tag"><i class="fas fa-tag"></i> 태그 : </label> <input class="roundop" type="text" name="tag" maxlength="255" id="id_tag" value="{{object.tag}}"></p>
+            <p>
+            &emsp;▷ 태그 란을 통해서 손쉽게 해당 게시글을 찾을 수 있게 하세요!<br>
+            &emsp;▷ 상태 추적시 의심부위나 특이사항의 중점단어를 기록해주면 유용하게 사용하실수 있습니다.<br>
+            &emsp;▷ ex. 산책X, 사료많이줌, 슬개골의심, 검진<br>
+            &emsp;▷ 작성요령 : 각 태그는 ( , ) 로 구분되며 ( # ) 을 추가로 입력할 필요가 없습니다.
+            </p>
+
+            {% csrf_token %}
+            <div align="center">
+                <br><button type="submit" class="btn raise"><i class="far fa-check-square"></i> 입력 완료</button>&emsp;
+                <button type="reset" class="btn raise" style="color: red;"><i class="far fa-window-close"></i> 다시 작성</button>
+            </div><br>
+
+        </form>
+    </div>
+</div>
+<br><br>
+
+{% endblock %}

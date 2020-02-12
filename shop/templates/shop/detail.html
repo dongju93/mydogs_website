@@ -1,0 +1,37 @@
+{% extends 'shopbase.html' %}
+{% load humanize %}
+{% block title %} - 상세보기{% endblock %}
+{% block content %}
+<br><br><br><br>
+    <div class="container">
+        <div class="row" style="font-family: 'SeoulNamsanM'; font-size: 16px;">
+
+            <div class="col-4" style="margin-right: 30px;">
+                <img class="shadows" style="border-radius: 15px;" src="{{ product.image.url }}" width="100%" />
+            </div>
+
+            <div class="col">
+
+                <h1 class="display-6" style="font-weight: 600;">{{ product.name }}</h1>
+                <br>
+                <p style="font-size: 23px; letter-spacing: 1px; font-weight: 600;"><span class="badge badge-secondary">가격</span> {{ product.price|floatformat:"0"|intcomma }}원</p>
+                <br>
+                <form action="{% url 'cart:product_add' product.id %}" method="post">
+                    <label for="id_quantity"><span class="badge badge-secondary" style="font-size: 18px;">수량</span> </label>
+                    <input type="number" name="quantity" value="1" required="" id="id_quantity" class="roundop" />
+                    <input type="hidden" name="is_update" value="False" id="id_is_update" />
+                    {%csrf_token%}
+                    <input type="submit" class="btn btn-primary btn-sm" value="장바구니에 추가" />
+                </form>
+                <br>
+                <h5><span class="badge badge-secondary" style="margin-bottom: 7px;">상세정보</span>
+                {{ product.description|linebreaks }}</h5>
+            </div>
+            <div class="container" align="center">
+                <br>
+                <img src="{{ product.desimage.url}}" width="70%">
+            </div>
+        </div>
+    </div>
+<br><br><br>
+{% endblock %}

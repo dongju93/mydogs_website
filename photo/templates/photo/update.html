@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %} - 사진 수정 {% endblock %}
+
+{% block style %}
+    #footer {
+        position: absolute;
+        bottom: 0;
+        width: 1110px;
+    }
+{% endblock %}
+
+{% block content %}
+<br>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 panel panel-default" style="font-family: 'Poor Story', cursive; font-size: 19px;">
+            <br>
+            <form action="" method="post" enctype="multipart/form-data">
+                <p><label for="id_photo" style="font-size: 18px; font-weight: 800;">1-2. 사진 :&nbsp;</label><a href="{{object.photo}}">{{object.photo}}</a><br>
+                    <span style="font-size: 18px; font-weight: 800;">1-2. 변경</span> : <input type="file" name="photo" accept="image/*" id="id_photo"></p><br>
+                <p><label for="id_text" style="font-size: 25px; font-weight: 800;">2. 내용</label> <textarea class="roundop" style="width:100%;" name="text" cols="20" rows="5" required="" id="id_text">{{object.text}}</textarea></p><br>
+                <p><label for="id_tag" style="font-size: 25px; font-weight: 800;">3. 태그 - </label> <input class="roundop" type="text" name="tag" maxlength="255" id="id_tag" value="{{object.tag}}"></p>
+                &emsp;▷ 작성요령 : 각 태그는 ( , ) 로 구분되며 ( # ) 을 추가로 입력할 필요가 없습니다.
+                {% csrf_token %}
+                <br><br>
+                <div align="center">
+                    <br><button type="submit" class="btn raise"><i class="far fa-check-square"></i> 수정 완료</button>&emsp;
+                </div>
+                <br><br><br>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+{% endblock %}

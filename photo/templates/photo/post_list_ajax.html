@@ -1,0 +1,24 @@
+{% for post in photos %}
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 panel panel-default">
+            <p><img src="{{post.photo.url}}" style="width:100%; border-radius: 20px;" class="shadows"></p>
+            <input type="button" id="{{post.id}}"
+               class="like {% if request.user in post.like_user_set.all  %} liked {% endif %}"
+               name="{{ post.id }}" style="Value:hidden;" />
+            <a href="{% url 'photo:photo_detail' pk=post.id %}" style="font-size: 12.5px; color: black;"><i class="far fa-comment fa-2x"></i></a>
+            <br>
+            <p id="count-{{ post.id }}" style="display:inline; padding-bottom: 5px; font-family: 'Nanum Gothic', sans-serif;">좋아요 {{ post.like_count }}개</p>
+            <br>
+            <p style="margin-top: 5px;"><a style="font-weight: 600; font-family: 'Nanum Gothic', sans-serif;">{{post.author.username}}</a><a style="font-family: 'Poor Story', cursive; font-size: 19px;"> {{post.text|linebreaksbr}}</a>
+                <br>
+                {% load tagging_tags %}
+                {% tags_for_object post as tags %}
+                {% for tag in tags %}
+                    <a style="font-family: 'Poor Story', cursive; font-size: 19px;" href="{% url 'photo:tagged_object_list' tag.name %}">#{{ tag.name }}</a>
+                {% endfor %}
+            </p>
+        </div>
+        <br><br>
+    </div>
+{% endfor %}

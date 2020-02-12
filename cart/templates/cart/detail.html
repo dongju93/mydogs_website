@@ -1,0 +1,95 @@
+{% extends 'shopbase.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %} - 장바구니{% endblock %}
+
+{% block content %}
+<div class="container">
+    <br><br>
+    <h2 align="center" style="font-weight: 600; font-size: 40px; font-family: 'Binggrae-Bold';"><i style="color: #9B7CC9;" class="fas fa-cart-arrow-down"></i>&nbsp; 장바구니</h2>
+    <br>
+        <table class="table table-striped">
+            <thead style="font-weight: 600; font-family: 'Nanum Gothic', sans-serif;">
+                <tr style="font-weight: 600; font-family: 'Nanum Gothic', sans-serif;" align="center">
+                    <th scope="col" width="300">제품 사진</th>
+                    <th scope="col" width="320">제품 명</th>
+                    <th scope="col" width="20%">수량</th>
+                    <th scope="col">제거</th>
+                    <th scope="col">개당 가격</th>
+                    <th scope="col">총 가격</th>
+                </tr>
+            </thead>
+
+            <tbody style="font-family: 'SeoulNamsanM'; font-size: 16px;">
+                {% for item in cart %}
+                    {% with product=item.product %}
+                        <tr align="center">
+
+                            <th scope="row">
+                                <a href="{{ product.get_absolute_url }}">
+                                    <img src="{{ product.image.url }}" style="border-radius: 10px; width:50%;" class="img-thumbnail" />
+                                </a>
+                            </th>
+
+                            <td style="font-weight: 600;">{{ product.name }}</td>
+
+                            <td>
+                                <form action="{% url 'cart:product_add' product.id %}" method="post">
+                                    {{ item.quantity_form.quantity }}
+                                    {{ item.quantity_form.is_update }}
+                                    <input type="submit" class="btn btn-light roundop" value="변경" />
+                                    {% csrf_token %}
+                                </form>
+                            </td>
+
+                            <td><a href="{% url 'cart:product_remove' product.id %}">Remove</a></td>
+
+                            <td class="num">{{ item.price|floatformat:"0"|intcomma }}원</td>
+                            <td class="num">{{ item.total_price|floatformat:"0"|intcomma }}원</td>
+
+                        </tr>
+                    {% endwith %}
+                {% endfor %}
+
+                {% if cart.coupon %}
+                    <tr class="subtotal">
+                        <td>총 금액</td>
+                        <td colspan="4"></td>
+                        <td >{{ cart.get_product_total|floatformat:"0"|intcomma }}원</td>
+                    </tr>
+                    <tr>
+                        <td>"{{ cart.coupon.code }}" 쿠폰 사용<!-- - ￦{{ cart.coupon.amount|floatformat:"0"|intcomma }}--></td>
+                        <td colspan="4"></td>
+                        <td >{{ cart.get_discount_total|floatformat:"0"|intcomma }}원 할인</td>
+                    </tr>
+                {% endif %}
+                <tr class="total" style="font-size: 18px; font-weight: 600;">
+                    <td>최종 결제금액</td>
+                    <td colspan="4"></td>
+                    <td class="num">{{ cart.get_total_price|floatformat:"0"|intcomma }}원</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="container" style="font-family: 'SeoulNamsanM'; font-size: 16px;">
+            <form action='{% url "coupon:add" %}' method="post">
+            <label for="id_code">쿠폰 번호 : </label>
+                <input type="text" name="code" required="" id="id_code" class="roundop" />
+                <input type="submit" class="btn btn-success" value="사용" />
+                {% csrf_token %}
+            </form>
+            <hr>
+            <!--<tr class="total">
+                <td>Total</td>
+                <td colspan="4"></td>
+                <td class="num">￦{{ cart.get_product_total|floatformat:"0"|intcomma }}</td>
+            </tr>-->
+
+            <p class="text-right">
+                <a href="{% url 'shop:product_all' %}" class="btn btn-secondary">계속 쇼핑하기</a>
+                <a href="{% url 'orders:order_create' %}" style="width: 120px; height: 38px;" class="btn movebtn">주문하기</a>
+            </p>
+        </div>
+</div>
+<br><br>
+{% endblock %}

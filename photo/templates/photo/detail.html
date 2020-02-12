@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %} {{object.text|truncatechars:10}} {% endblock %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 panel panel-default">
+
+            <p><img src="{{ object.photo.url }}" style="width:100%; border-radius: 20px;" class="shadows"></p>
+            <br>
+            <input type="button" id="{{object.id}}"
+                    class="like {% if request.user in object.like_user_set.all  %} liked {% endif %}"
+                    name="{{ object.id }}" style="Value:hidden;" />
+            <p id="count-{{ object.id }}" style="display:inline; padding-bottom: 5px;">좋아요 {{ object.like_count }}개</p>
+            <br>
+            {% for like_user in object.like_user_set.all %}
+                {{ like_user.username }}
+            {% endfor %}님이 좋아합니다.<br><br>
+
+            <p style="margin-top: 5px;"><a style="font-weight: 600;">{{object.author.username}}</a> {{object.text|linebreaksbr}}
+            <br>
+            {% load tagging_tags %}
+            {% tags_for_object object as tags %}
+            {% for tag in tags %}
+                <a href="{% url 'photo:tagged_object_list' tag.name %}">#{{ tag.name }}</a>
+            {% endfor %}
+            </p>
+
+            {% load disqus_tags %}
+            {% disqus_show_comments %}
+            <br>
+            {% if object.author.id == request.user.id %}
+                <a href="{% url 'photo:photo_delete' pk=object.id %}" class="float-right" style="color: #FE2E2E; text-decoration: none;"><i class="fas fa-trash-alt fa-2x"></i></a>
+                <a href="{% url 'photo:photo_update' pk=object.id %}" class="float-right" style="color: #3ADF00; text-decoration: none;"><i class="fas fa-edit fa-2x"></i>&nbsp;&nbsp;</a>
+            {% endif %}
+            <br><br>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <br><br>
+
+
+    <script type="text/javascript">
+      $(".like").click(function(){
+        var pk = $(this).attr('name')
+        $.ajax({
+          type: "POST",
+          url: "{% url 'photo:post_like' %}",
+          data: {'pk': pk, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+          dataType: "json",
+
+          success: function(response){
+            // alert(response.message);
+            $("#count-"+pk).html("좋아요 "+response.like_count+"개");
+            $('#'+pk).toggleClass('liked');
+
+          },
+          error: function(request, status, error){
+            alert(request);
+            window.location.replace("/account/login/");
+          },
+        });
+      })
+    </script>
+
+{% endblock %}

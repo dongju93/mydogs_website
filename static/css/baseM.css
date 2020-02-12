@@ -1,0 +1,251 @@
+/* Header */
+#header_fix {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #B2CCFF;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+#ul_top {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #B2CCFF;
+}
+
+li {
+    float: left;
+}
+
+li a, .dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    background-color: #ccdae0;
+}
+
+li.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+#green {
+    background-color: #4CAF50;
+}
+
+
+/* Footer */
+#footer {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    color: #fff;
+    background: #101010;
+}
+
+#footer a {
+    color: #fff;
+}
+
+#footer li a {
+    padding: 0;
+}
+
+#footer a:hover {
+    color: #45aed6;
+}
+
+#footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 -7.5px;
+}
+
+#footer ul > li {
+    display: inline-block;
+    background: rgb(47, 47, 47);
+    padding: 3px 0;
+    width: 31px;
+    text-align: center;
+}
+
+@media only screen and (min-width: 768px) {
+    #footer .social-icons {
+        float: right;
+        padding-right: 70px;
+    }
+}
+
+
+/* Background png */
+.paper {
+    background-image: url("https://realorigin-s3.s3.ap-northeast-2.amazonaws.com/static/media/background/back.jpg");
+    background-repeat: repeat;
+}
+
+
+/* Like and Liked */
+.like {
+    height: 24px;
+    width: 24px;
+    background-image: url(http://hyunjoolee.pythonanywhere.com/static/images/sprites/fef349.png);
+    border: none;
+    background-position: -26px -349px;
+    background-color: rgba( 255, 255, 255, 0.0 );
+    margin: 0px 8px 0px 0;
+}
+
+.liked {
+    background-image: url(http://hyunjoolee.pythonanywhere.com/static/images/sprites/fef349.png);
+    background-color: rgba( 255, 255, 255, 0.0 );
+    background-position: 0 -349px;
+}
+
+
+/* White color */
+.white {
+    color: #FFFFFF;
+}
+
+
+/* AM/PM hidden */
+input[type=time]::-webkit-datetime-edit-ampm-field {
+    display: none;
+}
+
+
+/* Font */
+@font-face {
+    font-family: 'HSGaeulsenggak'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/HSGaeulsenggak.woff') format('woff'); font-weight: normal; font-style: normal;
+}
+@font-face {
+    font-family: 'SeoulNamsanM'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulNamsanM.woff') format('woff'); font-weight: normal; font-style: normal;
+}
+@font-face {
+    font-family: 'Binggrae-Bold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Binggrae-Bold.woff') format('woff'); font-weight: normal; font-style: normal;
+}
+@font-face {
+    font-family: 'BMDOHYEON'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMDOHYEON.woff') format('woff'); font-weight: bold; font-style: normal;
+}
+
+
+/* Form with no visual */
+.clearform {
+    border: none;
+    background: transparent;
+}
+
+
+/* Form with round */
+.roundop {
+    border-radius: 5px;
+    background-color: rgba( 255, 255, 255, 0.5 );
+}
+
+
+/* Background shadow */
+.shadows {
+    display: inline-block;
+    box-shadow: 0px 0px 20px -5px rgba(0, 0, 0, 0.8);
+}
+
+
+/* Button with line animation */
+.movebtn {
+    background:#00D8FF;
+    color:#fff;
+    border:none;
+    position:relative;
+    height:60px;
+    font-size: 20px;
+    cursor:pointer;
+    transition:800ms ease all;
+    outline:none;
+}
+
+.movebtn:hover {
+    background:#fff;
+    color:#00D8FF;
+}
+
+.movebtn:before, .movebtn:after {
+    content:'';
+    position:absolute;
+    top:0;
+    right:0;
+    height:2px;
+    width:0;
+    background: #1AAB8A;
+    transition:400ms ease all;
+}
+
+.movebtn:after {
+    right:inherit;
+    top:inherit;
+    left:0;
+    bottom:0;
+}
+
+.movebtn:hover:before, .movebtn:hover:after {
+    width:100%;
+    transition:800ms ease all;
+}
+
+
+/* Button hover up */
+.raise {
+    border: 2px solid;
+    line-height: 1;
+    transition: 0.25s;
+    color: #007bff;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.raise:hover,
+.raise:focus {
+    box-shadow: 0 0.5em 0.5em -0.4em #343a40;
+    transform: translateY(-0.25em);
+    color: #007bff;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.onlyhover {
+    transition: 0.25s;
+}
+
+.onlyhover:hover {
+    transform: translateY(-0.25em);
+}

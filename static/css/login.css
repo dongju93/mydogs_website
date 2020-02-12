@@ -1,0 +1,228 @@
+/* Ryan Login form*/
+form {
+    width: 400px;
+    padding: 30px 25px 30px;
+    margin: 50px auto;
+    background: #f8d348;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Drow Ryan */
+svg {
+    width: 70%;
+    border-radius: 50%;
+    background: #fff;
+    margin-bottom: 40px;
+    align-self: center;
+    transform-style: preserve-3d;
+}
+
+input {
+    font-size: 16px;
+    border: 0;
+    border-radius: 5px;
+    outline: 0;
+    padding: 10px 15px;
+    margin-top: 15px;
+}
+
+/* Ryan look up and down */
+@keyframes lookaway-up {
+    from {
+        transform: rotate3d(.2, 0, -.01, 20deg);
+    }
+
+    to {
+        transform: rotate3d(.2, -.05, -.01, 20deg);
+    }
+}
+
+@keyframes lookaway-down {
+    0% {
+        transform: rotate3d(-.2, 0, -.01, 20deg);
+    }
+
+    100% {
+        transform: rotate3d(-.2, -.05, .01, 20deg);
+    }
+}
+
+/* Facial */
+.ears {
+    transform-origin: 50% 50% 5px;
+}
+
+.eyes {
+    transform-origin: 50% 50% -40px;
+}
+
+.muzzle {
+    transform-origin: 50% 50% -44px;
+}
+
+.ears, .eyes, .muzzle {
+    transition: transform .5s;
+}
+
+.focused {
+    transition: transform .1s;
+}
+
+.look-away .ears,
+.look-away .eyes,
+.look-away .muzzle {
+    transition-duration: .3s;
+    animation: 3s infinite alternate;
+}
+
+.look-away.up .ears,
+.look-away.up .eyes,
+.look-away.up .muzzle {
+    transform: rotate3d(.2, 0, 0, 20deg) !important;
+}
+
+.look-away.down .ears,
+.look-away.down .eyes,
+.look-away.down .muzzle {
+    transform: rotate3d(-.2, 0, 0, 20deg) !important;
+}
+
+.look-away.playing.up .ears,
+.look-away.playing.up .eyes,
+.look-away.playing.up .muzzle {
+    animation-name: lookaway-up;
+}
+
+.look-away.playing.down .ears,
+.look-away.playing.down .eyes,
+.look-away.playing.down .muzzle {
+    animation-name: lookaway-down;
+}
+
+
+/* Checkbox */
+.checks {position: relative;}
+
+/* Real checkbox hidden */
+.checks input[type="checkbox"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip:rect(0,0,0,0);
+  border: 0
+}
+
+.checks input[type="checkbox"] + label {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Fake checkbox */
+.checks input[type="checkbox"] + label:before {
+  content: ' ';
+  display: inline-block;
+  width: 21px;  /* 체크박스의 너비를 지정 */
+  height: 21px;  /* 체크박스의 높이를 지정 */
+  line-height: 21px; /* 세로정렬을 위해 높이값과 일치 */
+  margin: -2px 8px 0 0;
+  text-align: center;
+  vertical-align: middle;
+  background: #fafafa;
+  border: 1px solid #cacece;
+  border-radius : 3px;
+  box-shadow: 0px 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+}
+
+.checks input[type="checkbox"] + label:active:before,
+.checks input[type="checkbox"]:checked + label:active:before {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Checked */
+.checks input[type="checkbox"]:checked + label:before {
+  content: '\2714';
+  color: #99a1a7;
+  text-shadow: 1px 1px #fff;
+  background: #e9ecee;
+  border-color: #adb8c0;
+  box-shadow: 0px 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+}
+
+.checks.etrans input[type="checkbox"] + label {
+  padding-left: 30px;
+}
+
+.checks.etrans input[type="checkbox"] + label:before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin-top: 0;
+  opacity: .6;
+  box-shadow: none;
+  border-color: #6cc0e5;
+  -webkit-transition: all .12s, border-color .08s;
+  transition: all .12s, border-color .08s;
+}
+
+.checks.etrans input[type="checkbox"]:checked + label:before {
+  position: absolute;
+  content: "";
+  width: 10px;
+  top: -5px;
+  left: 5px;
+  border-radius: 0;
+  opacity:1;
+  background: transparent;
+  border-color:transparent #6cc0e5 #6cc0e5 transparent;
+  border-top-color:transparent;
+  border-left-color:transparent;
+  -ms-transform:rotate(45deg);
+  -webkit-transform:rotate(45deg);
+  transform:rotate(45deg);
+}
+
+.no-csstransforms .checks.etrans input[type="checkbox"]:checked + label:before {
+  content: "\2714";
+  top: 0;
+  left: 0;
+  width: 21px;
+  line-height: 21px;
+  color: #6cc0e5;
+  text-align: center;
+  border: 1px solid #6cc0e5;
+}
+
+
+/* Login button */
+.buttonn {
+  border: none;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.button1 {
+  background-color: rgb(255,252,254);
+  color: black;
+}
+
+.button1:hover {
+  background-color: rgb(255,242,249);
+  color: black;
+}

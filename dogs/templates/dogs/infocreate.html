@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %} - 기본정보 작성{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 panel panel-default" style="font-family: 'Poor Story', cursive; font-size: 20px;">
+        <br><h1 align="center">내 반려견 정보 입력</h1><br><br>
+
+        <h3><i class="fas fa-dog fa-lg"></i> 기본 정보</h3><br>
+        <form action="" method="post" enctype="multipart/form-data">
+
+            <p><label for="id_names"> 이름 : </label> <input class="roundop" type="text" name="names" maxlength="100" required="" id="id_names" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;"></p>
+
+            <p><label for="id_dogpic"> 사진 :</label> <input class="roundop" type="file" name="dogpic" accept="image/*" id="id_dogpic"></p>
+
+            <p><label for="id_birth"> 태어난 날 : </label> <input class="roundop" type="date" name="birth" id="id_birth"></p>
+
+            <p><label for="id_weight">몸무게 : </label> <input class="roundop" type="number" name="weight" step="0.01" required="" id="id_weight"> kg(.00 까지 입력가능)</p>
+
+            <p><label for="id_species">종 :
+                <select class="roundop" name="species" id="id_species">
+                    <optgroup label="대형">
+                        <option value="Afghan Hound">아프간 하운드</option>
+                        <option value="American Pitbull Terrier">아메리칸 핏불 테리어</option>
+                        <option value="Bloodhound">블러드하운드</option>
+                        <option value="Border Collie">보더 콜리</option>
+                        <option value="Chow Chow">차우 차우</option>
+                        <option value="Dalmatian">달마시안</option>
+                        <option value="Dutch Shepherd">더치 셰퍼드</option>
+                        <option value="English Foxhound">잉글리시 폭스하운드</option>
+                        <option value="German Pinscher">저먼 핀셔</option>
+                        <option value="German Shepherd">저먼 셰퍼드</option>
+                        <option value="Goldador">골다도</option>
+                        <option value="Golden Retriever">골든 리트리버</option>
+                        <option value="Great Dane">그레이트 데인</option>
+                        <option value="Great Pyrenees">그레이트 피레니즈</option>
+                        <option value="Greyhound">그레이하운드</option>
+                        <option value="Samoyed">사모예드</option>
+                        <option value="Siberian Husky">시베리안 허스키</option>
+                        <option value="Crossbreeds">혼종</option>
+                    </optgroup>
+                    <optgroup label="중형">
+                        <option value="Airedale Terrier">에어데일 테리어</option>
+                        <option value="American Eskimo Dog">아메리칸 에스키모</option>
+                        <option value="Appenzeller Sennenhund">아펜젤러 세넨훈드</option>
+                        <option value="Bulldog">불독</option>
+                        <option value="Cocker Spaniel">코커 스파니엘</option>
+                        <option value="Pembroke Welsh Corgi">펨브록 웰시 코기</option>
+                        <option value="Crossbreeds">혼종</option>
+                    </optgroup>
+                    <optgroup label="소형">
+                        <option value="Australian Terrier">오스트레일리안 테리어</option>
+                        <option value="Beagle">비글</option>
+                        <option value="Bichon Frise">비숑 프리제</option>
+                        <option value="Boston Terrier">보스턴 테리어</option>
+                        <option value="Chihuahua">치와와</option>
+                        <option value="Dachshund">닥스훈트</option>
+                        <option value="Poodle">푸들</option>
+                        <option value="Pug">퍼그</option>
+                        <option value="Shih Tzu">시츄</option>
+                        <option value="Yorkshire Terrier">요크셔 테리어</option>
+                        <option value="Maltese">말티즈</option>
+                        <option value="Pomeranian">포메라니안</option>
+                        <option value="Crossbreeds">혼종</option>
+                    </optgroup>
+                </select>
+            </label></p>
+
+            <p><label for="id_gender"> 성별 : </label>
+                <label id="id_gender"><input type="radio" name="gender" maxlength="15" required="" value="Male"> 수
+                <input type="radio" name="gender" maxlength="15" required="" value="Female"> 암 </label></p>
+
+            <p><label for="id_neutral"> 중성화 여부 : </label> <input type="checkbox" name="neutral" id="id_neutral"></p>
+
+            <p><label for="id_registernumber"> 반려견 등록번호 :</label> <input class="roundop" type="number" name="registernumber" required="" id="id_registernumber"></p>
+            <br><hr>
+            <br><h3><i class="fas fa-syringe"></i> 반려견 기본 예방접종</h3>
+            <p>&emsp;- 예방접종한 동물병원에 문의하시면 쉽게 알 수 있습니다.</p><br>
+
+            <p><label for="id_dhppl">DHPPL : </label> <input class="roundop" type="date" name="dhppl" id="id_dhppl"></p>
+
+            <p><label for="id_corona">코로나 : </label> <input class="roundop" type="date" name="corona" id="id_corona"></p>
+
+            <p><label for="id_kennel">켄넬 : </label> <input class="roundop" type="date" name="kennel" id="id_kennel"></p>
+
+            <p><label for="id_rabies">광견병 : </label> <input class="roundop" type="date" name="rabies" id="id_rabies"></p>
+
+            <p><label for="id_heartworm">심장사상충 : </label> <input class="roundop" type="date" name="heartworm" id="id_heartworm"></p>
+
+            {% csrf_token %}
+            <div align="center">
+                <br><button type="submit" class="btn raise"><i class="far fa-check-square"></i> 입력 완료</button>&emsp;
+                <button type="reset" class="btn raise" style="color: red;"><i class="far fa-window-close"></i> 다시 작성</button>
+            </div><br>
+        </form>
+        <br>
+    </div>
+    <div class="com-md-2"></div>
+</div>
+
+{% endblock %}

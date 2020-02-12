@@ -1,0 +1,638 @@
+{% extends 'base.html' %}
+
+{% block style %}
+    .dot {overflow:hidden;float:left;width:12px;height:12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');}
+    .dotOverlay {position:relative;bottom:10px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;font-size:12px;padding:5px;background:#fff;}
+    .dotOverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+    .number {font-weight:bold;color:#ee6152;}
+    .dotOverlay:after {content:'';position:absolute;margin-left:-6px;left:50%;bottom:-8px;width:11px;height:8px;background:url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')}
+    .distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
+    .distanceInfo .label {display:inline-block;width:50px;}
+    .distanceInfo:after {content:none;}
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="container" align="center">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+
+    <br>
+    <div class="container">
+        <h3 style="font-family: 'Binggrae-Bold';"><i style="color: #74D36D;" class="fas fa-road"></i> 오늘의 <span style="color: #74D36D;">산책 경로</span>를 체크해보세요!</h3>
+        <div id="map" style="width:100%;height:350px;"></div>
+        <p style="font-family: 'Binggrae-Bold'; font-size: 20px; padding-top: 10px;">왼쪽 클릭으로 선을 잇고, 오른쪽 마우스를 클릭으로 선 그리기가 종료됩니다.</p>
+    </div>
+    <br><br>
+
+
+    {% for post in mymy %}
+    <h3 style="font-family: 'Binggrae-Bold';"><i style="color: #8A6F24;" class="fas fa-bone"></i> <span style="color: #5AAEFF;">"{{post.names}}"</span> 월 평균 <span style="color: #8A6F24;">사료와 간식량</span></h3>
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <p style="font-family: 'Binggrae-Bold'; font-size: 20px; padding-top: 10px;">견종별, 몸무게별 사료량은 모두 상이합니다, 사료 뒷면을 확인해주세요.
+    <br>사료를 잘 먹지않는 친구들은 자율배식보다는 정해진 시간에 사료를 급여해주는 것이 좋습니다.</p>
+
+    <br><br>
+
+
+    <h3 style="font-family: 'Binggrae-Bold';"><i style="color: #74D36D;" class="fas fa-walking"></i> <span style="color: #5AAEFF;">"{{post.names}}"</span> 월 평균 <span style="color: #74D36D;">산책</span>횟수</h3>
+    <div id="container4" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <p style="font-family: 'Binggrae-Bold'; font-size: 20px; padding-top: 10px;">활동량이 많은 반려견의 경우 전체 평균대 이상을 유지 시켜주시는 것이 가장 좋습니다!
+    <br>반려견주 필수항목, 1일 1산책! 잊지말아주세요^^</p>
+
+    <br><br>
+
+
+    <h3 style="font-family: 'Binggrae-Bold';"><i style="color: #B2A3C9;" class="fas fa-weight"></i> 등록된 반려견들와 <span style="color: #5AAEFF;">"{{post.names}}"</span> <span style="color: #B2A3C9;">몸무게</span> 비교하기</h3>
+    <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <p style="font-family: 'Binggrae-Bold'; font-size: 20px; padding-top: 10px;">자신의 강아지 종과 비교하여 건강상태를 미리 확인해보세요!
+    <br>혼종의 경우, 몸집이 비슷한 반려견종과 비교하는 것이 가장 적절합니다.</p>
+
+    <br><br>
+
+    <script>
+    Highcharts.chart('container', {
+      chart: {
+        type: 'line'
+      },
+      title: {
+        text: ''
+      },
+      subtitle: {
+        text: ''
+      },
+      xAxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
+      },
+      yAxis: {
+        title: {
+          text: '배급량'
+        }
+      },
+      plotOptions: {
+        line: {
+          dataLabels: {
+            enabled: true
+          },
+          enableMouseTracking: true
+        }
+      },
+      series: [{
+        name: '사료(gram)',
+        data: [
+        {% if  janM.foodamount__avg == null %} 0 {% else %} {{janM.foodamount__avg}} {% endif %},
+        {% if  febM.foodamount__avg == null %} 0 {% else %} {{febM.foodamount__avg}} {% endif %},
+        {% if  marM.foodamount__avg == null %} 0 {% else %} {{marM.foodamount__avg}} {% endif %},
+        {% if  aprM.foodamount__avg == null %} 0 {% else %} {{aprM.foodamount__avg}} {% endif %},
+        {% if  mayM.foodamount__avg == null %} 0 {% else %} {{mayM.foodamount__avg}} {% endif %},
+        {% if  junM.foodamount__avg == null %} 0 {% else %} {{junM.foodamount__avg}} {% endif %},
+        {% if  julM.foodamount__avg == null %} 0 {% else %} {{julM.foodamount__avg}} {% endif %},
+        {% if  augM.foodamount__avg == null %} 0 {% else %} {{augM.foodamount__avg}} {% endif %} ]
+      }, {
+        name: '간식(갯수)',
+        data: [
+        {% if  janM.snackcount__avg == null %} 0 {% else %} {{janM.snackcount__avg}} {% endif %} ,
+        {% if  febM.snackcount__avg == null %} 0 {% else %} {{febM.snackcount__avg}} {% endif %} ,
+        {% if  marM.snackcount__avg == null %} 0 {% else %} {{marM.snackcount__avg}} {% endif %} ,
+        {% if  aprM.snackcount__avg == null %} 0 {% else %} {{aprM.snackcount__avg}} {% endif %} ,
+        {% if  mayM.snackcount__avg == null %} 0 {% else %} {{mayM.snackcount__avg}} {% endif %} ,
+        {% if  junM.snackcount__avg == null %} 0 {% else %} {{junM.snackcount__avg}} {% endif %} ,
+        {% if  julM.snackcount__avg == null %} 0 {% else %} {{julM.snackcount__avg}} {% endif %} ,
+        {% if  augM.snackcount__avg == null %} 0 {% else %} {{augM.snackcount__avg}} {% endif %} ]
+      }]
+    });
+    </script>
+
+    <script>
+    Highcharts.chart('container4', {
+      chart: {
+        zoomType: 'xy'
+      },
+      title: {
+        text: ''
+      },
+      subtitle: {
+        text: ''
+      },
+      xAxis: [{
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+        crosshair: true
+      }],
+      yAxis: [{ // Primary yAxis
+        labels: {
+          format: '{value} 회',
+          style: {
+            color: Highcharts.getOptions().colors[1]
+          }
+        },
+        title: {
+          text: '전체평균',
+          style: {
+            color: Highcharts.getOptions().colors[1]
+          }
+        }
+      }, { // Secondary yAxis
+        title: {
+          text: '내 평균',
+          style: {
+            color: Highcharts.getOptions().colors[0]
+          }
+        },
+        labels: {
+          format: '{value} 회',
+          style: {
+            color: Highcharts.getOptions().colors[0]
+          }
+        },
+        opposite: true
+      }],
+      tooltip: {
+        shared: true
+      },
+      legend: {
+        layout: 'vertical',
+        align: 'left',
+        x: 120,
+        verticalAlign: 'top',
+        y: 100,
+        floating: true,
+        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || 'rgba(255,255,255,0.25)'
+      },
+      series: [{
+        name: '내 평균',
+        type: 'column',
+        yAxis: 1,
+        data: [
+        {% if  janM.walkcount__avg == null %} 0 {% else %} {{janM.walkcount__avg}} {% endif %} ,
+        {% if  febM.walkcount__avg == null %} 0 {% else %} {{febM.walkcount__avg}} {% endif %} ,
+        {% if  marM.walkcount__avg == null %} 0 {% else %} {{marM.walkcount__avg}} {% endif %} ,
+        {% if  aprM.walkcount__avg == null %} 0 {% else %} {{aprM.walkcount__avg}} {% endif %} ,
+        {% if  mayM.walkcount__avg == null %} 0 {% else %} {{mayM.walkcount__avg}} {% endif %} ,
+        {% if  junM.walkcount__avg == null %} 0 {% else %} {{junM.walkcount__avg}} {% endif %} ,
+        {% if  julM.walkcount__avg == null %} 0 {% else %} {{julM.walkcount__avg}} {% endif %} ,
+        {% if  augM.walkcount__avg == null %} 0 {% else %} {{augM.walkcount__avg}} {% endif %} ],
+        tooltip: {
+          valueSuffix: ' 회'
+        }
+
+      }, {
+        name: '전체평균',
+        type: 'spline',
+        yAxis: 1,
+        data: [
+        {% if  janMA.walkcount__avg == null %} 0 {% else %} {{janMA.walkcount__avg}} {% endif %} ,
+        {% if  febMA.walkcount__avg == null %} 0 {% else %} {{febMA.walkcount__avg}} {% endif %} ,
+        {% if  marMA.walkcount__avg == null %} 0 {% else %} {{marMA.walkcount__avg}} {% endif %} ,
+        {% if  aprMA.walkcount__avg == null %} 0 {% else %} {{aprMA.walkcount__avg}} {% endif %} ,
+        {% if  mayMA.walkcount__avg == null %} 0 {% else %} {{mayMA.walkcount__avg}} {% endif %} ,
+        {% if  junMA.walkcount__avg == null %} 0 {% else %} {{junMA.walkcount__avg}} {% endif %} ,
+        {% if  julMA.walkcount__avg == null %} 0 {% else %} {{julMA.walkcount__avg}} {% endif %} ,
+        {% if  augMA.walkcount__avg == null %} 0 {% else %} {{augMA.walkcount__avg}} {% endif %} ],
+        tooltip: {
+          valueSuffix: ' 회'
+        }
+      }]
+    });
+    </script>
+
+    <script>
+    // ■■■■■ 모든 종의 몸무게 드릴다운 ■■■■■
+    Highcharts.chart('container2', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: '클릭하여 모든 견종의 평균 몸무게를 확인해보세요!'
+        },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                text: '평균 몸무게'
+            }
+
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:.1f}kg'
+                }
+            }
+        },
+
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}kg</b> 평균 몸무게<br/>'
+        },
+
+        series: [
+            {
+                name: "크기",
+                colorByPoint: true,
+                data: [
+                    {
+                        name: "대형",
+                        y: {{ bigAVG.weight__avg }},
+                        drilldown: "대형"
+                    },
+                    {
+                        name: "중형",
+                        y: {{ middleAVG.weight__avg }},
+                        drilldown: "중형"
+                    },
+                    {
+                        name: "소형",
+                        y: {{ smallAVG.weight__avg }},
+                        drilldown: "소형"
+                    },
+                    {
+                        name: "{{post.names}}",
+                        y: {{ post.weight }},
+                        drilldown: null
+                    }
+                ]
+            }
+        ],
+        drilldown: {
+            series: [
+                {
+                    name: "대형",
+                    id: "대형",
+                    data: [
+                        [
+                            "Afghan Hound",
+                            {{ afghanAVG.weight__avg }}
+                        ],
+                        [
+                            "American Pitbull Terrier",
+                            {{ pitbullAVG.weight__avg }}
+                        ],
+                        [
+                            "Bloodhound",
+                            {{ bloodAVG.weight__avg }}
+                        ],
+
+                        [
+                            "Chow Chow",
+                            {{ chowAVG.weight__avg }}
+                        ],
+                        [
+                            "Dalmatian",
+                            {{ dalmatianAVG.weight__avg }}
+                        ],
+                        [
+                            "Dutch Shepherd",
+                            {{ dutchAVG.weight__avg }}
+                        ],
+                        [
+                            "English Foxhound",
+                            {{ englishAVG.weight__avg }}
+                        ],
+                        [
+                            "German Shepherd",
+                            {{ gershepherdAVG.weight__avg }}
+                        ],
+                        [
+                            "Goldador",
+                            {{ goldadorAVG.weight__avg }}
+                        ],
+                        [
+                            "Golden Retriever",
+                            {{ goldenAVG.weight__avg }}
+                        ],
+                        [
+                            "Great Dane",
+                            {{ daneAVG.weight__avg }}
+                        ],
+                        [
+                            "Great Pyrenees",
+                            {{ pyreneesAVG.weight__avg }}
+                        ],
+                        [
+                            "Greyhound",
+                            {{ houndAVG.weight__avg }}
+                        ],
+                        [
+                            "Samoyed",
+                            {{ samoyedAVG.weight__avg }}
+                        ],
+                        [
+                            "Siberian Husky",
+                            {{ huskyAVG.weight__avg }}
+                        ],
+                        [
+                            "Airedale Terrier",
+                            {{ airedaleAVG.weight__avg }}
+                        ],
+                        [
+                            "Appenzeller Sennenhund",
+                            {{ appenzellerAVG.weight__avg }}
+                        ],
+                        [
+                            "Bulldog",
+                            {{ bulldogAVG.weight__avg }}
+                        ]
+                    ]
+                },
+                {
+                    name: "중형",
+                    id: "중형",
+                    data: [
+
+                        [
+                            "American Eskimo Dog",
+                            {{ eskimoAVG.weight__avg }}
+                        ],
+                        [
+                            "Cocker Spaniel",
+                            {{ cockerAVG.weight__avg }}
+                        ],
+                        [
+                            "Pembroke Welsh Corgi",
+                            {{ corgiAVG.weight__avg }}
+                        ],
+                        [
+                            "Border Collie",
+                            {{ borderAVG.weight__avg }}
+                        ],
+                        [
+                            "German Pinscher",
+                            {{ pinscherAVG.weight__avg }}
+                        ]
+                    ]
+                },
+                {
+                    name: "소형",
+                    id: "소형",
+                    data: [
+                        [
+                            "Australian Terrier",
+                            {{ australianAVG.weight__avg }}
+                        ],
+                        [
+                            "Beagle",
+                            {{ beagleAVG.weight__avg }}
+                        ],
+                        [
+                            "Bichon Frise",
+                            {{ bichonAVG.weight__avg }}
+                        ],
+                        [
+                            "Boston Terrier",
+                            {{ bostonAVG.weight__avg }}
+                        ],
+                        [
+                            "Chihuahua",
+                            {{ chiAVG.weight__avg }}
+                        ],
+                        [
+                            "Dachshund",
+                            {{ dachhundAVG.weight__avg }}
+                        ],
+                        [
+                            "Poodle",
+                            {{ poodleAVG.weight__avg }}
+                        ],
+                        [
+                            "Pug",
+                            {{ pugAVG.weight__avg }}
+                        ],
+                        [
+                            "Shih Tzu",
+                            {{ tzuAVG.weight__avg }}
+                        ],
+                        [
+                            "Yorkshire Terrier",
+                            {{ yorkAVG.weight__avg }}
+                        ],
+                        [
+                            "Maltese",
+                            {{ malteseAVG.weight__avg }}
+                        ],
+                        [
+                            "Pomeranian",
+                            {{ pomeAVG.weight__avg }}
+                        ]
+                    ]
+                }
+            ]
+        }
+    });
+    </script>
+    {% endfor %}
+
+
+    <h3 style="font-family: 'Binggrae-Bold';"><i style="color: #00D8FF;" class="fas fa-sort-numeric-down"></i> 등록된 <span style="color: #00D8FF;">견종 수</span> 현황</h3>
+    <div id="container3" style="min-width: 320px; height: 800px; margin: 0 auto"></div>
+
+
+    <script>
+    // ■■■■■ 종 별 등록 현황 ■■■■■
+    Highcharts.chart('container3', {
+        chart: {
+            type: 'packedbubble',
+            height: '70%'
+        },
+        title: {
+            text: ''
+        },
+        tooltip: {
+            useHTML: true,
+            pointFormat: '<b>{point.name}:</b> {point.value} 마리'
+        },
+        plotOptions: {
+            packedbubble: {
+                minSize: '50%',
+                maxSize: '500%',
+                zMin: 0,
+                zMax: 1000,
+                layoutAlgorithm: {
+                    splitSeries: false,
+                    gravitationalConstant: 0.02
+                },
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}',
+                    filter: {
+                        property: 'y',
+                        operator: '>',
+                        value: 250
+                    },
+                    style: {
+                        color: 'black',
+                        textOutline: 'none',
+                        fontWeight: 'normal'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: '대형',
+            data: [{
+                name: 'Afghan Hound',
+                value: {{ afghanAVG.species__count }}
+            }, {
+                name: 'American Pitbull Terrier',
+                value: {{ pitbullAVG.species__count }}
+            },
+            {
+                name: "Bloodhound",
+                value: {{ bloodAVG.species__count }}
+            },
+
+            {
+                name: "Chow Chow",
+                value: {{ chowAVG.species__count }}
+            },
+            {
+                name: "Dalmatian",
+                value: {{ dalmatianAVG.species__count }}
+            },
+            {
+                name: "Dutch Shepherd",
+                value: {{ dutchAVG.species__count }}
+            },
+            {
+                name: "English Foxhound",
+                value: {{ englishAVG.species__count }}
+            },
+            {
+                name: "German Shepherd",
+                value: {{ gershepherdAVG.species__count }}
+            },
+            {
+                name: "Goldador",
+                value: {{ goldadorAVG.species__count }}
+            }, {
+                name: "Golden Retriever",
+                value: {{ goldenAVG.species__count }}
+            }, {
+                name: "Great Dane",
+                value: {{ daneAVG.species__count }}
+            },
+            {
+                name: "Great Pyrenees",
+                value: {{ pyreneesAVG.species__count }}
+            },
+            {
+                name: "Greyhound",
+                value: {{ houndAVG.species__count }}
+            },
+            {
+                name: "Samoyed",
+                value: {{ samoyedAVG.species__count }}
+            },
+            {
+                name: "Siberian Husky",
+                value: {{ huskyAVG.species__count }}
+            },
+            {
+                name: "Airedale Terrier",
+                value: {{ airedaleAVG.species__count }}
+            },
+            {
+                name: "Appenzeller Sennenhund",
+                value: {{ appenzellerAVG.species__count }}
+            },
+            {
+                name: "Bulldog",
+                value: {{ bulldogAVG.species__count }}
+            }]
+        }, {
+            name: '중형',
+            data: [{
+                name: "American Eskimo Dog",
+                value: {{ eskimoAVG.species__count }}
+            },
+            {
+                name: "Cocker Spaniel",
+                value: {{ cockerAVG.species__count }}
+            },
+            {
+                name: "Pembroke Welsh Corgi",
+                value: {{ corgiAVG.species__count }}
+            },
+            {
+                name: "Border Collie",
+                value: {{ borderAVG.species__count }}
+            },
+            {
+                name: "German Pinscher",
+                value: {{ pinscherAVG.species__count }}
+            }]
+        }, {
+            name: '소형',
+            data: [{
+                name: "Australian Terrier",
+                value: {{ australianAVG.species__count }}
+            },
+            {
+                name: "Beagle",
+                value: {{ beagleAVG.species__count }}
+            },
+            {
+                name: "Bichon Frise",
+                value: {{ bichonAVG.species__count }}
+            },
+            {
+                name: "Boston Terrier",
+                value: {{ bostonAVG.species__count }}
+            },
+            {
+                name: "Chihuahua",
+                value: {{ chiAVG.species__count }}
+            },
+            {
+                name: "Dachshund",
+                value: {{ dachhundAVG.species__count }}
+            },
+            {
+                name: "Poodle",
+                value: {{ poodleAVG.species__count }}
+            },
+            {
+                name: "Pug",
+                value: {{ pugAVG.species__count }}
+            },
+            {
+                name: "Shih Tzu",
+                value: {{ tzuAVG.species__count }}
+            },
+            {
+                name: "Yorkshire Terrier",
+                value: {{ yorkAVG.species__count }}
+            },
+            {
+                name: "Maltese",
+                value: {{ malteseAVG.species__count }}
+            },
+            {
+                name: "Pomeranian",
+                value: {{ pomeAVG.species__count }}
+            }]
+        }]
+    });
+    </script>
+
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=044659bb33bec1bbb858b7f51e0bc39a"></script>
+
+    {% load static %}
+    <script src="{% static 'js/rootmap.js' %}"></script>
+
+</div>
+{% endblock %}

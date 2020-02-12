@@ -1,0 +1,24 @@
+{% extends 'shopbase.html' %}
+
+{% block title %} - 주문완료{% endblock %}
+
+{% block content %}
+<br><br><br><br>
+<div class="container" style="background-image: url('https://cdn.pixabay.com/photo/2016/04/12/22/35/watercolour-1325656_960_720.jpg'); border-radius: 10px;">
+    <br><br><br><br><br><br>
+    <div class="row" style="font-family: 'SeoulNamsanM'; font-size: 16px;">
+        <i style="font-size: 180px; color: #4B4B4B; margin-left: 30px;" class="fas fa-clipboard-check"></i>
+        <div class="col">
+            <div class="alert alert-success" role="alert" style="line-height: 2.0em;">
+                <br>
+                <span style="font-weight: 600; font-size: 25px;">감사합니다!</span><br>
+                주문이 정상적으로 처리되었습니다.<br>
+                주문번호는 <strong>{{order.id}}</strong> 입니다.
+                <br>
+                주문 내역 확인은 <a href="{% url 'shop:myorders' %}" style="font-size: 18px;">여기서</a> 해주세요.
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block style %}
+
+    /* Button new style */
+    .raise {
+        padding: .3em .3em;
+        border-radius: 5px;
+        background-color: rgba(255,255,255,0.5);
+    }
+
+{% endblock %}
+
+{% block head_title %} - Sign Out {% endblock %}
+
+{% block content %}
+<div class="container" align="center" style="font-family: 'Binggrae-Bold'; font-size: 20px;">
+  <br><br>
+  <h1>Logout.</h1>
+  <hr><br>
+  <p>로그아웃 하시겠습니까?</p>
+  <br>
+  <form method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+    {% endif %}
+    <button type="submit" class="raise">{% trans '확인' %}</button>
+  </form>
+</div>
+{% endblock %}

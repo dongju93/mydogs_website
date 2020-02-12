@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% block title %} - Photos{% endblock %}
+
+{% block style %}
+
+#search {
+    border-radius: 5px;
+    width: 180px;
+    height: 30px;
+}
+
+.loader {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 3em;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+}
+.loader,
+.loader:before,
+.loader:after {
+    animation: 1s infinite ease-in-out;
+}
+.loader:before,
+.loader:after {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.loader-black { background-color: #333; }
+
+.loader-10 {
+    background-color: white;
+    animation: loader9 0.4s infinite linear;
+}
+.loader-10 {
+    animation: loader10 60s infinite ease-in-out;
+}
+.loader-10:before {
+    content: '';
+    width: 80%;
+    height: 80%;
+    background-color: white;
+    top: 10%;
+    left: 10%;
+    box-shadow: 5px -3px 0 rgba(255,100,100,0.7),
+                5px 5px 0 rgba(100,255,100,0.7),
+                -3px 5px 0 rgba(100,100,255,0.7),
+                -5px -5px 0 rgba(240,240,120,0.7);
+}
+.loader-10:after {
+    content: '';
+    border: 3px solid white;
+    z-index: 2;
+    top: -3px;
+    left: -3px;
+}
+
+@keyframes loader10 {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360000deg); }
+}
+
+{% endblock %}
+
+{% block content %}
+        <div class="row box">
+            <div class="col-md-2"></div>
+            <div class="col-md-8 panel panel-default container-1">
+            <br>
+            <form style="text-align: center;" class="search-form" action="{% url 'photo:photo_list' %}" method="post">
+                {% csrf_token %}
+                <input style="opacity: 0.5;" id="search" class="tag-search fas" type="text" name="tag" placeholder=" &#xf002; 검색" pattern="#?[\wㄱ-ㅎ|ㅏ-ㅣ|가-힣]+" title="특수문자, 공백 입력불가" required >
+                {# <input type="submit"> - input이 하나일 때는 별도의 submit 없이 엔터로 전송이 가능하다.#}
+            </form>
+            <br>
+            </div>
+        </div>
+
+    {% for post in photos %}
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8 panel panel-default">
+                <p><img src="{{post.photo.url}}" style="width:100%; border-radius: 20px;" class="shadows"></p>
+                <input type="button" id="{{post.id}}"
+                   class="like {% if request.user in post.like_user_set.all  %} liked {% endif %}"
+                   name="{{ post.id }}" style="Value:hidden;" />
+                <a href="{% url 'photo:photo_detail' pk=post.id %}" style="font-size: 12.5px; color: black;"><i class="far fa-comment fa-2x"></i></a>
+                <br>
+                <p id="count-{{ post.id }}" style="display:inline; padding-bottom: 5px; font-family: 'Nanum Gothic', sans-serif;">좋아요 {{ post.like_count }}개</p>
+                <br>
+                <p style="margin-top: 5px;"><a style="font-weight: 600; font-family: 'Nanum Gothic', sans-serif;">{{post.author.username}}</a><a style="font-family: 'Poor Story', cursive; font-size: 19px;"> {{post.text|linebreaksbr}}</a>
+                    <br>
+                    {% load tagging_tags %}
+                    {% tags_for_object post as tags %}
+                    {% for tag in tags %}
+                        <a style="font-family: 'Poor Story', cursive; font-size: 19px;" href="{% url 'photo:tagged_object_list' tag.name %}">#{{ tag.name }}</a>
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    {% endfor %}
+
+    <div id="post_list_ajax">
+    </div>
+    <input id="page" type="hidden" value="2" />
+    <div align="center">
+        <button id="callmorepost" type="button" class="loader loader-10"></button>
+    </div>
+    <br><br>
+
+
+    <script type="text/javascript">
+    // 좋아요
+    $(document).on("click", ".like", function() {
+        var pk = $(this).attr('name')
+        $.ajax( {
+            type: "POST",
+            url: "{% url 'photo:post_like' %}",
+            data: {'pk': pk, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+
+            success: function(response) {
+                // alert(response.message);
+                $("#count-"+pk).html("좋아요 "+response.like_count+"개");
+                $('#'+pk).toggleClass('liked');
+            },
+            error: function(request, response, status, error) {
+                alert(response);
+                window.location.replace("/photo/");
+            },
+        });
+    })
+
+
+    // 무한 스크롤
+    $('#callmorepost').click(function() {
+        var page = $("#page").val();
+        var end_page = 3;
+        if(page > end_page) {
+            return;
+        }
+        callMorePostAjax(page);
+        $("#page").val(parseInt(page)+1);
+    });
+
+    $(window).scroll(function() {
+        var scrollHeight = $(window).scrollTop() + $(window).height();
+        var documentHeight = $(document).height();
+
+        if (scrollHeight  >= documentHeight) {
+            var page = $("#page").val();
+            var end_page = 10;
+            if(page > end_page){
+                return;
+            }
+            callMorePostAjax(page);
+            $("#page").val(parseInt(page)+1);
+        }
+    });
+
+    function callMorePostAjax(page) {
+        var end_page = 10;
+        if(page > end_page) {
+            return;
+        }
+        $.ajax( {
+            type : 'POST',
+            url: "/photo/",
+            data: {
+                'page': page,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: addMorePostAjax,
+            dataType: 'html',
+            error: function(request, status, error) {
+                alert('오류발생');
+            },
+        });
+    }
+
+    function addMorePostAjax(data, textStatus, jqXHR) {
+        $('#post_list_ajax').append(data);
+    }
+    </script>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}- Delete{% endblock %}
+
+{% block style %}
+    #footer {
+        position: absolute;
+        bottom: 0;
+        width: 1110px;
+    }
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 panel panel-default" align="center">
+        <br><br><br><br><br><br>
+        <div class="alert alert-info">
+            정말로 {{object.updated}}에<br>
+            게시된 사진을 지우시겠습니까?
+        </div>
+        <form action="" method="post">
+            {{form.as_p}}
+            {% csrf_token %}
+            <input type="submit" class="btn btn-danger" value="삭제">
+        </form>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+{% endblock %}

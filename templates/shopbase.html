@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block script %}
+{% endblock %}
+
+{% block cart %}
+<li>
+    <a href="{% url 'cart:detail' %}" class="roundop" style="color: #000000; text-decoration: none;"><i class="fas fa-shopping-cart"></i> CART
+        {% if cart|length > 0 %}
+            {{ cart.get_total_price|floatformat:"0"|intcomma }}원 / {{ cart|length }}개
+        {% else %}
+            : Empty
+        {% endif %}
+    </a>
+</li>
+{% endblock %}

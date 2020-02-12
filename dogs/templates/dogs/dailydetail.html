@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %} - 일일정보 상세보기{% endblock %}
+
+{% block style %}
+    #footer {
+        position: absolute;
+        bottom: 0;
+        width: 1110px;
+    }
+{% endblock %}
+
+{% block content %}
+
+<br>
+    <div class="row">
+        <div class="col-md-3"></div>
+
+        <ul style="font-family: 'Poor Story', cursive; font-size: 20px;">
+            <br>
+            <h2 align="center"><i class="fas fa-dog fa-lg"></i> 일일 기록</h2>
+            <br>
+            <p><i class="far fa-calendar-check"></i> 최초 작성일 : {{object.created}}</p>
+            <p><i class="fas fa-signature"></i> 이름 : {{object.names}}</p>
+            <p><i class="fas fa-walking"></i> 산책 횟수 : {{object.walkcount}}회 /
+                산책시간 : {{object.walktime.hour}}시간 {{object.walktime.minute}}분</p>
+            <p><i class="fas fa-bone"></i> 사료 배급량 : {{object.foodamount}} gram /
+                간식 배급횟수 : {{object.snackcount}} 회</p>
+
+            <p><i class="far fa-bell"></i> 특이사항 : {{object.remarks}}</p>
+
+            <p><i class="fas fa-asterisk"></i> 상태추적 : {{object.statustrace}}</p>
+            <p><i class="fas fa-tag"></i> 태그 : #{{object.tag}}</p>
+            <br><p>최종 수정일 : {{object.updated}}</p>
+
+            <br><br>
+            <a href="{% url 'dogs:daily_delete' pk=object.id %}" class="float-right onlyhover" style="text-decoration: none; color: #FE2E2E;"><i class="fas fa-trash-alt fa-2x"></i><br>삭제</a>
+            <a href="{% url 'dogs:daily_update' pk=object.id %}" class="float-right onlyhover" style="text-decoration: none; color: #3ADF00;"><i class="fas fa-edit fa-2x"></i>&nbsp;&nbsp;<br>수정</a>
+        </ul>
+
+</div>
+{% endblock %}
