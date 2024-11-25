@@ -23,7 +23,7 @@ mock==3.0.5
 mysqlclient==1.4.2
 oauthlib==3.0.1
 pilkit==2.0
-Pillow==6.0.0
+Pillow==6.2.0
 pop==5.2.0
 py-moneyed==0.8.0
 pycparser==2.19
